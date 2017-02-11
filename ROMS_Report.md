@@ -118,7 +118,23 @@ There are several different data assimilation method could be applied in the ROM
 
 ###Simple Nudging
 
-TBD
+The equations for simple nudging method are as follows.
+
+
+\[
+x_o = F_{x_o}(\vec{x}) + g (y - x)
+\]
+\[
+x_u = F_{x_u}(\vec{x})
+\]
+
+In the equations, $x_o$ and $x_u$ are the observed variable and unobserved variables respectively. y is the observed data, and g is the nudging coefficient.
+
+In this method, the nudging coefficient g will modify the nudging strength and thus control the conditional Lyapunov exponent. If the largest Lyapunov exponent is smaller than zero in the system, all the unstable dimensions are constrained and, as a result, all the variables will be "nudged" to the right trojectory.
+
+In order to constrain all the unstable dimensions, a minimum percentage of data is required to be observed. This is one of the question we would like to solve with ROMS: How many variables do we need to measure, to get a good prediction, or in other word, to constrain all the unstable dimensions?
+
+However, when applying the nudging method, we may violate a specific physics law, since we are adding an extra nudging term g(y-x) to the system. For instance, if we are nudging the sea surface height (Choose $x_0$ to be $\zeta$), then by adding the extra term, we are violating the conservation of mass. Therefore, in order to satisfy the physics law, the dynamical nudging method, which we are planning to apply to ROMS, needs to be used. This method will be explained later.
 
 ###I4D-VAR
 

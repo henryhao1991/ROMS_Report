@@ -5,7 +5,7 @@ The Regional Ocean Modeling System (ROMS) is a well-designed Fortran package, wh
 
 ###Dynamic Equations
 
-The governing dynamical equations of three-dimensional, free-surface, Reynolds-averaged Navier-Stokes equations are
+The governing dynamical equations of three-dimensional, free-surface, Reynolds-averaged Navier-Stokes equations are (See appendix A for derivation and more details)
 
 $$
 \frac{\partial H_zu}{\partial t} + \frac{ \partial (uH_zu)}{\partial x} + \frac{ \partial( v H_z u)}{\partial y}  + \frac{\partial(\Omega H_zu)}{\partial s}  - f H_z v = - \frac{ H_z}{\rho_0}\frac{ \partial p}{\partial x} -   H_z g\frac{ \partial \zeta }{\partial x} - \frac{\partial}{\partial s}(-K_M \frac{\partial u}{\partial z} - \frac{v}{H_z}\frac{\partial u}{\partial s})
@@ -142,7 +142,53 @@ TBD
 
 ##Appendix
 
-###Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
+###A. Derivation of Reynolds-averaged Navier-Stokes equations
+
+First, we shall start from the general Navier-Stokes equations and continuity equation in tensor notation,
+
+$$
+\frac{\partial}{\partial t}(\rho u_i)+u_j\frac{\partial}{\partial x_j}(\rho u_i)-\mu \frac{\partial^2}{\partial x_j\partial x_j}u_i = -\frac{\partial p}{\partial x_i}+f_i
+$$
+$$
+\frac{\partial \rho}{\partial t}+\frac{\partial}{\partial x_i}(\rho u_i) = 0
+$$
+
+In the equations above, $\vec u$ is the velocity vector of the fluid and $u_i$ is the components in Cartesian coordinate. $\rho$, $\mu$, p are the density, dynamic viscosity, and pressure of the fluid respectively. $f_i$ is the external force term.
+
+There are several approximations accepted by ROMS. First, the hydrostatic approximation is made, which implies that the horizontal scale is very large compared to the vertical scale. Furthermore, the Boussinesq approximation is assumed as well, which means that the the variation in density is only important in the buoyancy term. As a result, the equations can be simplified as
+
+$$
+\frac{\partial u_i}{\partial t}+u_j\frac{\partial u_i}{\partial x_j}-\nu \frac{\partial^2}{\partial x_j\partial x_j}u_i = -\frac{\rho}{\rho_0}g_i+f_i
+$$
+$$
+\frac{\partial u_i}{\partial x_i} = 0
+$$
+$\nu = \mu/\rho_0$ is the kinematic viscosity.
+
+Then, we need to apply Reynolds decomposition to the systems, namely that we will decompose $\vec u(x,y,z,t)$ and other variables as
+
+$$
+\vec u(x,y,z,t) = \overline{u(x,y,z,t)}+u'(x,y,z,t)
+$$
+$\overline{u(x,y,z,t)}$ is the average of the velocity, while $u'(x,y,z,t)$ is the fluctuating term, satisfying $\overline{u'(x,y,z,t)} = 0$. Then the equations will become
+
+$$
+\frac{\partial (\overline{u_i}+u_i')}{\partial t}+(\overline{u_j}+u_j')\frac{\partial (\overline{u_i}+u_i')}{\partial x_j}-\nu \frac{\partial^2}{\partial x_j\partial x_j}(\overline{u_i}+u_i') = -\frac{\rho}{\rho_0}g_i+(\overline{f_i}+f_i')
+$$
+$$
+\frac{\partial (\overline{u_i}+u_i')}{\partial x_i} = 0
+$$
+
+Next, we will take the average of the equations, taking advantage of $\overline{u'(x,y,z,t)} = 0$, and rewriting $\overline{u_i}$ and $\overline{f_i}$ as $u_i$ and $f_i$ for simplicity, we have
+
+$$
+\frac{\partial u_i}{\partial t}+u_j\frac{\partial u_i}{\partial x_j}+\frac{\partial}{\partial x_j}\overline{u_i'u_j'}-\nu \frac{\partial^2}{\partial x_j\partial x_j}u_i = -\frac{\rho}{\rho_0}g_i+f_i
+$$
+$$
+\frac{\partial u_i}{\partial x_i} = 0
+$$
+
+###B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
 
 A module file mod_fourdvar.F is used to run the minimization of the cost function using Lanczos algorithm or descent algorithm. (More details are being studied in order for us to put in our dynamical nudging methos)
 

@@ -132,13 +132,9 @@ In order to constrain all the unstable dimensions, a minimum percentage of data 
 
 However, when applying the nudging method, we may violate a specific physics law, since we are adding an extra nudging term g(y-x) to the system. For instance, if we are nudging the sea surface height (Choose $x_0$ to be $\zeta$), then by adding the extra term, we are violating the conservation of mass. Therefore, in order to satisfy the physics law, the dynamical nudging method, which we are planning to apply to ROMS, needs to be used. This method will be explained later.
 
-### Dynamical State and Parameter Estimation
+### i-4DVar
 
-Estimating parameters and unobserved state variables in nonlinear dynamical system is an essential aspect of the subject, and also a matter of interest to many other fields such as control theory, biological science and engineering [1]. In a common setting one has an experimental system described by a state vector $\vec{X}(t)$, which usually has a large dimensionality. However, it is common that only a sparse subset of $\vec{X}(t)$ could be recorded over time. For example, in the context of an ocean model, variables such as pressure and temperature can be easily probed on the surface of the ocean, and may be to a depth that is not too deep. This left us a big chanllenge in estimating the remaining dimensions of our state variable $\vec{X}(t)$. Once we have established a physical model for our system of interest, we also need to estimate, given the sparsely distributed experimental data, our model parameters $\vec{p}$.
-
-Furthermore, if the model and the experimental system are chaotic, even if we have synchronized the data with our physical model, we would still face the problem that small perturbations in parameters or state variables can lead to large excursions near the synchronization manifold, and thus produce a very poor prediction to the future states.
-
-An approach called dynamical state and parameter estimation addresses these instabilities and regularizes them,  allowing for smooth surfaces in the space of parameters and initial conditions.
+TBD.
 
 ## Our Plan on Improving Data Assimilation in ROMS
 
@@ -147,6 +143,16 @@ An approach called dynamical state and parameter estimation addresses these inst
 In Zhe's paper [2], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
 
 Adding explanation and equations for time delayed nudging (It'll be here in the next report...)
+
+### Dynamical State and Parameter Estimation
+
+Estimating parameters and unobserved state variables in nonlinear dynamical system is an essential aspect of the subject, and also a matter of interest to many other fields such as control theory, biological science and engineering [1]. In a common setting one has an experimental system described by a state vector $\vec{X}(t)$, which usually has a large dimensionality. However, it is common that only a sparse subset of $\vec{X}(t)$ could be recorded over time. For example, in the context of an ocean model, variables such as pressure and temperature can be easily probed on the surface of the ocean, and may be to a depth that is not too deep. This left us a big chanllenge in estimating the remaining dimensions of our state variable $\vec{X}(t)$. Once we have established a physical model for our system of interest, we also need to estimate, given the sparsely distributed experimental data, our model parameters $\vec{p}$.
+
+Furthermore, if the model and the experimental system are chaotic, even if we have synchronized the data with our physical model, we would still face the problem that small perturbations in parameters or state variables can lead to large excursions near the synchronization manifold, and thus produce a very poor prediction to the future states.
+
+An approach called dynamical state and parameter estimation addresses these instabilities and regularizes them, allowing for smooth surfaces in the space of parameters and initial conditions.
+
+Let's say
 
 ## Appendix
 

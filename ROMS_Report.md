@@ -169,10 +169,12 @@ $$
 y_1(n+1)=F_1(\vec{y}(n);\vec{p})+u(n)[x_1(n)-y_1(n)]
 $$
 $$
-\vec{y}_R(n+1)=\vec{F}_R(\vec{y}(n);\vec{p})
+\vec{y}_R(n+1)=\vec{F}_R[\vec{y}(n);\vec{p}]
 $$
 
-Where ${u}(n)$ is the regularization term. $F_1$ and $F_R$ are the dynamical equations of the system.
+Where $C$ is the cost function we need to minimize, $u(n)$ is the regularization term. $F_1$ and $F_R$ are the dynamical equations of the system.
+
+(Detailed explanation of the above equations here...)
 
 (To be completed):
 1. How can we incorparate DSPE into ROMS.

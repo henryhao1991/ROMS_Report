@@ -118,19 +118,16 @@ There are several different data assimilation method could be applied in the ROM
 
 ###Simple Nudging
 
-The equations for simple nudging method are as follows.
+The equation for simple nudging method is as follows.
 
 
 \[
-x_o = F_{x_o}(\vec{x}) + g (y - x)
-\]
-\[
-x_u = F_{x_u}(\vec{x})
+\frac{dx_a}{dt} = F_a(x(t))+g_l(t)(y(t)-x(t))\delta_{al}
 \]
 
-In the equations, $x_o$ and $x_u$ are the observed variable and unobserved variables respectively. y is the observed data, and g is the nudging coefficient.
+In the equations, subscripts a and l mean all variables and unobserved variables respectively. y is the observed data, and $g_l$ is the nudging coefficient. $\delta_{al}$ implies that we are only nudging the observed variables.
 
-In this method, the nudging coefficient g will modify the nudging strength and thus control the conditional Lyapunov exponent. If the largest Lyapunov exponent is smaller than zero in the system, all the unstable dimensions are constrained and, as a result, all the variables will be "nudged" to the right trojectory.
+In this method, the nudging coefficient $g_l$ will modify the nudging strength and thus control the conditional Lyapunov exponent. If the largest Lyapunov exponent is smaller than zero in the system, all the unstable dimensions are constrained and, as a result, all the variables will be "nudged" to the right trojectory.
 
 In order to constrain all the unstable dimensions, a minimum percentage of data is required to be observed. This is one of the question we would like to solve with ROMS: How many variables do we need to measure, to get a good prediction, or in other word, to constrain all the unstable dimensions?
 
@@ -139,6 +136,14 @@ However, when applying the nudging method, we may violate a specific physics law
 ###I4D-VAR
 
 TBD
+
+##Our Plan on Improving Data Assimilation in ROMS
+
+###Time Delayed Nudging
+
+In Zhe's paper [1], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
+
+Adding explanation and equations for time delayed nudging (It'll be there in next report...)
 
 ##Appendix
 
@@ -355,3 +360,7 @@ The cost function and its gradient is called to compute in the following section
           END DO
 !
 ```
+
+Reference
+
+[1] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.

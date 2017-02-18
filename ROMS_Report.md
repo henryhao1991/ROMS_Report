@@ -154,7 +154,13 @@ An approach called dynamical state and parameter estimation addresses these inst
 
 Let's say we have a model with dynamical variables $\vec{y}(t)$, and from experiments we have measured a subset of a dynamical variable $\vec{X}(t)$ from some initial time $t_I$ to a final time $t_F$. In order to make any prediction, one must estimate any unkown fixed parameters in the model as well as all the state variales at time $t_F$: $\vec{y}(t_F)$. Then the model-based predictions or forecasts for $t>t_F$ can be accomplished.
 
-For simplicity we assume only the first dimension of $\vec{X}(t)$, i.e. $x_1(t)$ is measured over the time series. Also, we recognize that measurements are not made in continuous time but at discrete times. Thus we rewrite our dynamical state variable in discrete time: $\vec{X}(n)=\{x_1(n);\vec{X}_R(n)\}$, where $\vec{X}_R(n)$
+For simplicity we assume only the first dimension of $\vec{X}(t)$, i.e. $x_1(t)$ is measured over the time series. Also, we recognize that measurements are not made in continuous time but at discrete times. Thus we rewrite our dynamical state variable in discrete time: $\vec{X}(n)=\{x_1(n);\vec{X}_R(n)\}$, where $\vec{X}_R(n)$ are the unobserved dimensions.
+
+Similarly, We wirte our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}.
+
+
+
+
 
 ## Appendix
 

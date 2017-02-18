@@ -152,7 +152,7 @@ Furthermore, if the model and the experimental system are chaotic, even if we ha
 
 An approach called dynamical state and parameter estimation addresses these instabilities and regularizes them, allowing for smooth surfaces in the space of parameters and initial conditions.
 
-Let's say
+Let's say we have a model with dynamical variables $\vec{y}(t)$, and from experiments we have measured a subset of a dynamical variable $\vec{X}(t)$ from some initial time $t_I$ to a final time $t_F$. In order to make any prediction, one must estimate any unkown fixed parameters in the model as well as all the state variales at time $t_F$: $\vec{y}(t_F)$. Then the model-based predictions or forecasts for $t>t_F$ can be accomplished.
 
 ## Appendix
 

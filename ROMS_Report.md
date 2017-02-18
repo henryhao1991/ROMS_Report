@@ -83,7 +83,6 @@ Then $H_z(x,y,\sigma,t)$ is the vertical grid thickness. In ROMS, it is computed
 Surface refinement function as
 $$
 C(\sigma) = \frac{1-cosh(\theta_s\sigma)}{cosh(\theta_s)-1}\qquad      for\ \theta_s> 0\\
-
 C(\sigma) = -\sigma^2\qquad      for\ \theta_s\leq0
 $$
 Bottom refinement function as
@@ -121,9 +120,9 @@ There are several different data assimilation method could be applied in the ROM
 The equation for simple nudging method is as follows.
 
 
-\[
+$$
 \frac{dx_a}{dt} = F_a(x(t))+g_l(t)(y(t)-x(t))\delta_{al}
-\]
+$$
 
 In the equations, subscripts a and l mean all variables and unobserved variables respectively. y is the observed data, and $g_l$ is the nudging coefficient. $\delta_{al}$ implies that we are only nudging the observed variables.
 

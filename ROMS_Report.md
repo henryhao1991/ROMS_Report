@@ -164,7 +164,11 @@ The core equations for DSPE are:
 
 $$
 C(\vec{y};\vec{p};\vec{u})=\frac1{2N}\sum_{n=1}^{N-1} \{[x_1(n)-y_1(n)]^2+u^2(n)\}
+$$
+$$
 y_1(n+1)=F_1(\vec{y}(n);\vec{p})+u(n)[x_1(n)-y_1(n)]
+$$
+$$
 \vec{y}_R(n+1)=\vec{F}_R(\vec{y}(n);\vec{p})
 $$
 

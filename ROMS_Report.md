@@ -3,7 +3,7 @@
 ### Background
 The Regional Ocean Modeling System (ROMS) is a well-designed Fortran package, which simulates the free-surface geophysical fluid dynamics system, using an hydrostatic, primitive equatesiton with Boussinesq approximation. ROMS is developed with the Nonlinear integration kernel which has a wide application in nonlinear fluid dynamic studies.terrain-following vertical coordinate is applied in ROMS, in order to achieve better vertical resolution in shallow water and areas with complex bathymetry.
 
-###Dynamic Equations
+### Dynamic Equations
 
 The governing dynamical equations of three-dimensional, free-surface, Reynolds-averaged Navier-Stokes equations are (See appendix A for derivation and more details)
 
@@ -102,9 +102,9 @@ $$
 
 As shown above, these equations approximate those terms with the gradient of velocity/tracer, implying that they flow down the local gradient of u, v, C respectively. This method of turbulence closure is also called the Gradient Transport Theory or K-theory.
 
-##Data Assimilation with ROMS
+## Data Assimilation with ROMS
 
-###Why Data Assimilation is Needed?
+### Why Data Assimilation is Needed?
 
 Study of the data assimilation with partial observation is necessary and a fundamental challenge meteorology and oceanography because, in practice, it is impossible to measure the exact variable states of the entire system, due to but not limited to the following reasons:
 
@@ -116,7 +116,7 @@ Study of the data assimilation with partial observation is necessary and a funda
 
 There are several different data assimilation method could be applied in the ROMS. Here the two commonly used ones are simple nudging method and incremental 4D-VAR (I4D-VAR).
 
-###Simple Nudging
+### Simple Nudging
 
 The equation for simple nudging method is as follows.
 
@@ -133,21 +133,21 @@ In order to constrain all the unstable dimensions, a minimum percentage of data 
 
 However, when applying the nudging method, we may violate a specific physics law, since we are adding an extra nudging term g(y-x) to the system. For instance, if we are nudging the sea surface height (Choose $x_0$ to be $\zeta$), then by adding the extra term, we are violating the conservation of mass. Therefore, in order to satisfy the physics law, the dynamical nudging method, which we are planning to apply to ROMS, needs to be used. This method will be explained later.
 
-###I4D-VAR
+### I4D-VAR
 
 TBD
 
-##Our Plan on Improving Data Assimilation in ROMS
+## Our Plan on Improving Data Assimilation in ROMS
 
-###Time Delayed Nudging
+### Time Delayed Nudging
 
 In Zhe's paper [1], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
 
 Adding explanation and equations for time delayed nudging (It'll be there in next report...)
 
-##Appendix
+## Appendix
 
-###A. Derivation of Reynolds-averaged Navier-Stokes equations
+### A. Derivation of Reynolds-averaged Navier-Stokes equations
 
 First, we shall start from the general Navier-Stokes equations and continuity equation in tensor notation,
 

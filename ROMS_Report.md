@@ -39,7 +39,7 @@ Here, all variables are:
 | ----------------------------------- | --------------------------------------- |
 | $u$                                 | horizontal velocity in x direction      |
 | $v$                                 | horizontal velocity in y direction      |
-| $\sigma$                                 | the scaled sigma coordinate             |
+| $\sigma$                            | the scaled sigma coordinate             |
 | $\Omega$                            | vertical velocity in (sigma coordinate) |
 | $\zeta$                             | free-surface elevation                  |  
 
@@ -132,17 +132,21 @@ In order to constrain all the unstable dimensions, a minimum percentage of data 
 
 However, when applying the nudging method, we may violate a specific physics law, since we are adding an extra nudging term g(y-x) to the system. For instance, if we are nudging the sea surface height (Choose $x_0$ to be $\zeta$), then by adding the extra term, we are violating the conservation of mass. Therefore, in order to satisfy the physics law, the dynamical nudging method, which we are planning to apply to ROMS, needs to be used. This method will be explained later.
 
-### I4D-VAR
+### Dynamical State and Parameter Estimation
 
-TBD
+Estimating parameters and unobserved state variables in nonlinear dynamical system is an essential aspect of the subject, and also a matter of interest to many other fields such as control theory, biological science and engineering [1]. In a common setting one has an experimental system described by a state vector $\vec{X}(t)$, which usually has a large dimensionality. However, it is common that only a sparse subset of $\vec{X}(t)$ could be recorded over time. For example, in the context of an ocean model, variables such as pressure and temperature can be easily probed on the surface of the ocean, and may be to a depth that is not too deep. This left us a big chanllenge in estimating the remaining dimensions of our state variable $\vec{X}(t)$. Once we have established a physical model for our system of interest, we also need to estimate, given the sparsely distributed experimental data, our model parameters $\vec{p}$.
+
+Furthermore, if the model and the experimental system are chaotic, even if we have synchronized the data with our physical model, we would still face the problem that small perturbations in parameters or state variables can lead to large excursions near the synchronization manifold, and thus produce a very poor prediction to the future states.
+
+An approach called dynamical state and parameter estimation addresses these instabilities and regularizes them,  allowing for smooth surfaces in the space of parameters and initial conditions.
 
 ## Our Plan on Improving Data Assimilation in ROMS
 
 ### Time Delayed Nudging
 
-In Zhe's paper [1], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
+In Zhe's paper [2], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
 
-Adding explanation and equations for time delayed nudging (It'll be there in next report...)
+Adding explanation and equations for time delayed nudging (It'll be here in the next report...)
 
 ## Appendix
 
@@ -362,4 +366,5 @@ The cost function and its gradient is called to compute in the following section
 
 Reference
 
-[1] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.
+[1] Abarbanel, Henry DI, et al. "Dynamical state and parameter estimation." SIAM Journal on Applied Dynamical Systems (2009): 1341-1381.
+[2] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.

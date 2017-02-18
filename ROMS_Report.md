@@ -78,7 +78,7 @@ $$
 H_z\equiv\frac{\partial z}{\partial\sigma}
 $$
 Then $H_z(x,y,\sigma,t)$ is the vertical grid thickness. In ROMS, it is computed as $\Delta z/\Delta\sigma$.
-####Stretching Functions
+#### Stretching Functions
 (Ref. ROMS Manual)For the option Vstretch = 4, the stretching function is defined as a double stretching function:
 Surface refinement function as
 $$
@@ -92,7 +92,7 @@ C(\sigma) = \frac{e^{\theta_BC(\sigma)}-1}{1-e^{-\theta_B}}\qquad      for\ \the
 $$
 The rage of the parameters are $0\leq\theta_s\leq 10$ and $0\leq\theta_B\leq 4$.
 
-###Turbulence Closure
+### Turbulence Closure
 When the Reyhnolds-averaged Navier-Stokes equations are first derived, there are terms including the average in the perturbations of velocity, such as $\overline{u'w'}$, making the number of unknown variables greater than the number of equations. In order to solve the problem, the turbulence closure technique is used, and the equations are:
 $$
 \overline{u'w'} = -K_M\frac{\partial u}{\partial z}\\

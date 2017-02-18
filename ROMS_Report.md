@@ -156,10 +156,23 @@ Let's say we have a model with dynamical variables $\vec{y}(t)$, and from experi
 
 For simplicity we assume only the first dimension of $\vec{X}(t)$, i.e. $x_1(t)$ is measured over the time series. Also, we recognize that measurements are not made in continuous time but at discrete times. Thus we rewrite our dynamical state variable in discrete time: $\vec{X}(n)=\{x_1(n);\vec{X}_R(n)\}$, where $\vec{X}_R(n)$ are the unobserved dimensions.
 
-Similarly, We wirte our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}.
+Similarly, We wirte our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}$.
 
+(Other details to be added here...)
 
+The core equations for DSPE are:
 
+$$
+C(\vec{y};\vec{p};\vec{u})=\frac1{2N}\sum_{n=1}^{N-1} \{[x_1(n)-y_1(n)]^2+u^2(n)\}
+y_1(n+1)=F_1(\vec{y}(n);\vec{p})+u(n)[x_1(n)-y_1(n)]
+\vec{y}_R(n+1)=\vec{F}_R(\vec{y}(n);\vec{p})
+$$
+
+Where ${u}(n)$ is the regularization term. $F_1$ and $F_R$ are the dynamical equations of the system.
+
+(To be completed):
+1. How can we incorparate DSPE into ROMS.
+2. What physics questions can be asked.
 
 
 ## Appendix

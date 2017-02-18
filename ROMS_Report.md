@@ -220,7 +220,7 @@ $$
 $$
 we can get the equations in the "Dynamic Equations" section.
 
-###B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
+### B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
 
 A module file mod_fourdvar.F is used to run the minimization of the cost function using Lanczos algorithm or descent algorithm. (More details are being studied in order for us to put in our dynamical nudging methos)
 

@@ -8,17 +8,17 @@ The Regional Ocean Modeling System (ROMS) is a well-designed Fortran package, wh
 The governing dynamical equations of three-dimensional, free-surface, Reynolds-averaged Navier-Stokes equations are (See appendix A for derivation and more details)
 
 $$
-\frac{\partial H_zu}{\partial t} + \frac{ \partial (uH_zu)}{\partial x} + \frac{ \partial( v H_z u)}{\partial y}  + \frac{\partial(\Omega H_zu)}{\partial s}  - f H_z v = - \frac{ H_z}{\rho_0}\frac{ \partial p}{\partial x} -   H_z g\frac{ \partial \zeta }{\partial x} - \frac{\partial}{\partial s}(-K_M \frac{\partial u}{\partial z} - \frac{v}{H_z}\frac{\partial u}{\partial s})
+\frac{\partial H_zu}{\partial t} + \frac{ \partial (uH_zu)}{\partial x} + \frac{ \partial( v H_z u)}{\partial y}  + \frac{\partial(\Omega H_zu)}{\partial \sigma}  - f H_z v = - \frac{ H_z}{\rho_0}\frac{ \partial p}{\partial x} -   H_z g\frac{ \partial \zeta }{\partial x} - \frac{\partial}{\partial \sigma}(-\frac{K_M}{H_z} \frac{\partial u}{\partial z} - \frac{\nu}{H_z}\frac{\partial u}{\partial \sigma})+F_u+D_u
 $$
 
 $$
-\frac{\partial H_zv}{\partial t} + \frac{ \partial (uH_zv)}{\partial x} + \frac{ \partial( v H_z v)}{\partial y}  + \frac{\partial(\Omega H_zv)}{\partial s}  + f H_z u = - \frac{ H_z}{\rho_0}\frac{ \partial p}{\partial y} -   H_z g\frac{ \partial \zeta }{\partial y} - \frac{\partial}{\partial s}( -K_M \frac{\partial v}{\partial z} - \frac{v}{H_z}\frac{\partial v}{\partial s})
+\frac{\partial H_zv}{\partial t} + \frac{ \partial (uH_zv)}{\partial x} + \frac{ \partial( v H_z v)}{\partial y}  + \frac{\partial(\Omega H_zv)}{\partial \sigma}  + f H_z u = - \frac{ H_z}{\rho_0}\frac{ \partial p}{\partial y} -   H_z g\frac{ \partial \zeta }{\partial y} - \frac{\partial}{\partial \sigma}( -\frac{K_M}{H_z} \frac{\partial v}{\partial z} - \frac{\nu}{H_z}\frac{\partial v}{\partial \sigma})+F_v+D_v
 $$
 
 with the continuity equation
 
 $$
-\frac{\partial \zeta}{\partial t} + \frac{ \partial (H_zu)}{\partial x} + \frac{ \partial( H_z v)}{\partial y}  + \frac{\partial(H_z \Omega)}{\partial s}  = 0
+\frac{\partial \zeta}{\partial t} + \frac{ \partial (H_zu)}{\partial x} + \frac{ \partial( H_z v)}{\partial y}  + \frac{\partial(H_z \Omega)}{\partial \sigma}  = 0
 $$
 
 equation of State
@@ -29,7 +29,7 @@ $$
 and scalar transport equation for temperature and salinity
 
 $$
-\frac{\partial (H_z C)}{\partial t} + \frac{ \partial (u H_z C)}{\partial x} + \frac{ \partial( v H_z C)}{\partial y}  + \frac{\partial(\Omega H_z C)}{\partial s} = -\frac{\partial}{\partial s}( -K_C \frac{\partial C}{\partial z} - \frac{\upsilon_\theta}{H_z}\frac{\partial C}{\partial s})
+\frac{\partial (H_z C)}{\partial t} + \frac{ \partial (u H_z C)}{\partial x} + \frac{ \partial( v H_z C)}{\partial y}  + \frac{\partial(\Omega H_z C)}{\partial \sigma} = -\frac{\partial}{\partial \sigma}( -\frac{K_C}{H_z} \frac{\partial C}{\partial z} - \frac{\nu_\theta}{H_z}\frac{\partial C}{\partial \sigma})
 $$
 
 Here, all variables are:
@@ -39,7 +39,7 @@ Here, all variables are:
 | ----------------------------------- | --------------------------------------- |
 | $u$                                 | horizontal velocity in x direction      |
 | $v$                                 | horizontal velocity in y direction      |
-| $s$                                 | the scaled sigma coordinate             |
+| $\sigma$                                 | the scaled sigma coordinate             |
 | $\Omega$                            | vertical velocity in (sigma coordinate) |
 | $\zeta$                             | free-surface elevation                  |  
 
@@ -187,6 +187,33 @@ $$
 $$
 \frac{\partial u_i}{\partial x_i} = 0
 $$
+
+After applying hydrostatic approximation and turbulence closure (as discussed in the main text), the equations are
+$$
+\frac{\partial u}{\partial t}+\vec v\cdot\nabla u-fv =-\frac{1}{\rho_0}\frac{\partial p}{\partial x}+\frac{\partial^2 u}{\partial z^2}(\nu+K_M)+F_u+D_u
+$$
+$$
+\frac{\partial u}{\partial t}+\vec v\cdot\nabla v+fu =-\frac{1}{\rho_0}\frac{\partial p}{\partial y}+\frac{\partial^2 v}{\partial z^2}(\nu+K_M)+F_v+D_v
+$$
+$$
+\frac{\partial p}{\partial z} = -\rho g
+$$
+$$
+\frac{\partial u}{\partial x}+\frac{\partial v}{\partial y}+\frac{\partial w}{\partial z} = 0
+$$
+In the equations above, $\vec v$ is the velocity vector $(u,v,w)$, while u, v, w are the x,y,z velocity components. -fv and +fu are the Coriolis force terms. F is the external forcing, and D is the optional extra diffusing term.
+
+Last, we shall apply the terrain-following coordinate and introduce the stretching factor $H_z = \frac{\partial z}{\partial \sigma}$, as desctribed in "Vertical S-coordinate" section. Then using the chain rules,
+$$
+{(\frac{\partial}{\partial x})}_{z} = {(\frac{\partial}{\partial x})}_{\sigma}-(\frac{1}{H_z}){(\frac{\partial z}{\partial x})}_{\sigma}\frac{\partial}{\partial \sigma}
+$$
+$$
+{(\frac{\partial}{\partial y})}_{z} = {(\frac{\partial}{\partial y})}_{\sigma}-(\frac{1}{H_z}){(\frac{\partial z}{\partial y})}_{\sigma}\frac{\partial}{\partial \sigma}
+$$
+$$
+\frac{\partial}{\partial z} = \frac{1}{H_z}\frac{\partial}{\partial \sigma}
+$$
+we can get the equations in the "Dynamic Equations" section.
 
 ###B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
 

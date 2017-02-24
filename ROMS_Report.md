@@ -3,7 +3,7 @@
 ### Background
 The Regional Ocean Modeling System (ROMS) is a well-designed Fortran package, which simulates the free-surface geophysical fluid dynamics system, using an hydrostatic, primitive equatesiton with Boussinesq approximation. ROMS is developed with the Nonlinear integration kernel which has a wide application in nonlinear fluid dynamic studies.terrain-following vertical coordinate is applied in ROMS, in order to achieve better vertical resolution in shallow water and areas with complex bathymetry.
 
-###Dynamic Equations
+### Dynamic Equations
 
 The governing dynamical equations of three-dimensional, free-surface, Reynolds-averaged Navier-Stokes equations are (See appendix A for derivation and more details)
 
@@ -39,7 +39,7 @@ Here, all variables are:
 | ----------------------------------- | --------------------------------------- |
 | $u$                                 | horizontal velocity in x direction      |
 | $v$                                 | horizontal velocity in y direction      |
-| $\sigma$                                 | the scaled sigma coordinate             |
+| $\sigma$                            | the scaled sigma coordinate             |
 | $\Omega$                            | vertical velocity in (sigma coordinate) |
 | $\zeta$                             | free-surface elevation                  |  
 
@@ -78,12 +78,11 @@ $$
 H_z\equiv\frac{\partial z}{\partial\sigma}
 $$
 Then $H_z(x,y,\sigma,t)$ is the vertical grid thickness. In ROMS, it is computed as $\Delta z/\Delta\sigma$.
-####Stretching Functions
+#### Stretching Functions
 (Ref. ROMS Manual)For the option Vstretch = 4, the stretching function is defined as a double stretching function:
 Surface refinement function as
 $$
 C(\sigma) = \frac{1-cosh(\theta_s\sigma)}{cosh(\theta_s)-1}\qquad      for\ \theta_s> 0\\
-
 C(\sigma) = -\sigma^2\qquad      for\ \theta_s\leq0
 $$
 Bottom refinement function as
@@ -92,7 +91,7 @@ C(\sigma) = \frac{e^{\theta_BC(\sigma)}-1}{1-e^{-\theta_B}}\qquad      for\ \the
 $$
 The rage of the parameters are $0\leq\theta_s\leq 10$ and $0\leq\theta_B\leq 4$.
 
-###Turbulence Closure
+### Turbulence Closure
 When the Reyhnolds-averaged Navier-Stokes equations are first derived, there are terms including the average in the perturbations of velocity, such as $\overline{u'w'}$, making the number of unknown variables greater than the number of equations. In order to solve the problem, the turbulence closure technique is used, and the equations are:
 $$
 \overline{u'w'} = -K_M\frac{\partial u}{\partial z}\\
@@ -102,9 +101,9 @@ $$
 
 As shown above, these equations approximate those terms with the gradient of velocity/tracer, implying that they flow down the local gradient of u, v, C respectively. This method of turbulence closure is also called the Gradient Transport Theory or K-theory.
 
-##Data Assimilation with ROMS
+## Data Assimilation with ROMS
 
-###Why Data Assimilation is Needed?
+### Why Data Assimilation is Needed?
 
 Study of the data assimilation with partial observation is necessary and a fundamental challenge meteorology and oceanography because, in practice, it is impossible to measure the exact variable states of the entire system, due to but not limited to the following reasons:
 
@@ -116,14 +115,14 @@ Study of the data assimilation with partial observation is necessary and a funda
 
 There are several different data assimilation method could be applied in the ROMS. Here the two commonly used ones are simple nudging method and incremental 4D-VAR (I4D-VAR).
 
-###Simple Nudging
+### Simple Nudging
 
 The equation for simple nudging method is as follows.
 
 
-\[
+$$
 \frac{dx_a}{dt} = F_a(x(t))+g_l(t)(y(t)-x(t))\delta_{al}
-\]
+$$
 
 In the equations, subscripts a and l mean all variables and unobserved variables respectively. y is the observed data, and $g_l$ is the nudging coefficient. $\delta_{al}$ implies that we are only nudging the observed variables.
 
@@ -133,21 +132,58 @@ In order to constrain all the unstable dimensions, a minimum percentage of data 
 
 However, when applying the nudging method, we may violate a specific physics law, since we are adding an extra nudging term g(y-x) to the system. For instance, if we are nudging the sea surface height (Choose $x_0$ to be $\zeta$), then by adding the extra term, we are violating the conservation of mass. Therefore, in order to satisfy the physics law, the dynamical nudging method, which we are planning to apply to ROMS, needs to be used. This method will be explained later.
 
-###I4D-VAR
+### i-4DVar
 
-TBD
+TBD.
 
-##Our Plan on Improving Data Assimilation in ROMS
+## Our Plan on Improving Data Assimilation in ROMS
 
-###Time Delayed Nudging
+### Time Delayed Nudging
 
-In Zhe's paper [1], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
+In Zhe's paper [2], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
 
-Adding explanation and equations for time delayed nudging (It'll be there in next report...)
+Adding explanation and equations for time delayed nudging (It'll be here in the next report...)
 
-##Appendix
+### Dynamical State and Parameter Estimation
 
-###A. Derivation of Reynolds-averaged Navier-Stokes equations
+Estimating parameters and unobserved state variables in nonlinear dynamical system is an essential aspect of the subject, and also a matter of interest to many other fields such as control theory, biological science and engineering [1]. In a common setting one has an experimental system described by a state vector $\vec{X}(t)$, which usually has a large dimensionality. However, it is common that only a sparse subset of $\vec{X}(t)$ could be recorded over time. For example, in the context of an ocean model, variables such as pressure and temperature can be easily probed on the surface of the ocean, and may be to a depth that is not too deep. This left us a big chanllenge in estimating the remaining dimensions of our state variable $\vec{X}(t)$. Once we have established a physical model for our system of interest, we also need to estimate, given the sparsely distributed experimental data, our model parameters $\vec{p}$.
+
+Furthermore, if the model and the experimental system are chaotic, even if we have synchronized the data with our physical model, we would still face the problem that small perturbations in parameters or state variables can lead to large excursions near the synchronization manifold, and thus produce a very poor prediction to the future states.
+
+An approach called dynamical state and parameter estimation addresses these instabilities and regularizes them, allowing for smooth surfaces in the space of parameters and initial conditions.
+
+Let's say we have a model with dynamical variables $\vec{y}(t)$, and from experiments we have measured a subset of a dynamical variable $\vec{X}(t)$ from some initial time $t_I$ to a final time $t_F$. In order to make any prediction, one must estimate any unkown fixed parameters in the model as well as all the state variales at time $t_F$: $\vec{y}(t_F)$. Then the model-based predictions or forecasts for $t>t_F$ can be accomplished.
+
+For simplicity we assume only the first dimension of $\vec{X}(t)$, i.e. $x_1(t)$ is measured over the time series. Also, we recognize that measurements are not made in continuous time but at discrete times. Thus we rewrite our dynamical state variable in discrete time: $\vec{X}(n)=\{x_1(n);\vec{X}_R(n)\}$, where $\vec{X}_R(n)$ are the unobserved dimensions.
+
+Similarly, We wirte our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}$.
+
+(Other details to be added here...)
+
+The core equations for DSPE are:
+
+$$
+C(\vec{y};\vec{p};\vec{u})=\frac1{2N}\sum_{n=1}^{N-1} \{[x_1(n)-y_1(n)]^2+u^2(n)\}
+$$
+$$
+y_1(n+1)=F_1(\vec{y}(n);\vec{p})+u(n)[x_1(n)-y_1(n)]
+$$
+$$
+\vec{y}_R(n+1)=\vec{F}_R[\vec{y}(n);\vec{p}]
+$$
+
+Where $C$ is the cost function we need to minimize, $u(n)$ is the regularization term. $F_1$ and $F_R$ are the dynamical equations of the system.
+
+(Detailed explanation of the above equations here...)
+
+(To be completed):
+1. How can we incorparate DSPE into ROMS.
+2. What physics questions can be asked.
+
+
+## Appendix
+
+### A. Derivation of Reynolds-averaged Navier-Stokes equations
 
 First, we shall start from the general Navier-Stokes equations and continuity equation in tensor notation,
 
@@ -220,7 +256,7 @@ $$
 $$
 we can get the equations in the "Dynamic Equations" section.
 
-###B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
+### B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
 
 A module file mod_fourdvar.F is used to run the minimization of the cost function using Lanczos algorithm or descent algorithm. (More details are being studied in order for us to put in our dynamical nudging methos)
 
@@ -363,4 +399,5 @@ The cost function and its gradient is called to compute in the following section
 
 Reference
 
-[1] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.
+[1] Abarbanel, Henry DI, et al. "Dynamical state and parameter estimation." SIAM Journal on Applied Dynamical Systems (2009): 1341-1381.
+[2] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.

@@ -101,6 +101,29 @@ $$
 
 As shown above, these equations approximate those terms with the gradient of velocity/tracer, implying that they flow down the local gradient of u, v, C respectively. This method of turbulence closure is also called the Gradient Transport Theory or K-theory.
 
+### Boundary conditions
+
+#### Vertical boundary conditions
+
+In ROMS, there is a bottom layer is assume to have zero velocity (no-slip boundary condition), the thickness of the layer is defined as the roughness of the bottom $z_0$. However, usually $z_0$ is much smaller than the thickness of one vertical layer in the discretized vertical s-coordinate and the horizontal velocity (u,v) are evaluated at the mid point in each vertical layer ($\rho$ point in the following graph). For example, the $z_0$ value used in the previous toy model is 20 cm, while the thickness of the bottom layer is around 1000m.  Then we need to estimate the effect of the bottom no-slip layer on the lowest $\rho$ points, which gives us the bottom boundary condition to use in u and v.
+
+The method in ROMS to estimate the bottom stress from the no-slip boundary condition is to assume a layer of constant Reynolds stress near the bottom [3]. Then applying the turbulence closure we discussed before, we have
+
+$$
+K_M\frac{\partial u}{\partial z} = \tau_b^x(x,y,t)
+$$
+$$
+K_M\frac{\partial v}{\partial z} = \tau_b^y(x,y,t)
+$$
+
+Next, in order to get the bottom stress $\tau_b$, we assumed a logarithmic velocity profile of the bottom velocity, which is an analogy to the wind stress effect at the surface layer. The profile satisfies
+
+$$
+v(z) = \frac{v_\star}{\kappa}log(\frac{z}{z_0})
+$$
+
+In the equation above, z is the height above the bottom, which is ($z_{\rho 1}-z_{w0}$) for our case. $z_0$ is the roughness of the bottom as mentioned above. $\kappa$ is the von Karman's constant, and $v_\star$ is the current friction velocity defined as $\rho v_\star^2 = \tau_b$. Therefore, since we have the initial velocity profile, we can use the logarithmic profile above to obtain the estimate of bottom stress, then apply it to the bottom boundary conditions, which is actually what ROMS does in the code.
+
 ## Data Assimilation with ROMS
 
 ### Why Data Assimilation is Needed?
@@ -142,7 +165,7 @@ TBD.
 
 In Zhe's paper [2], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
 
-Adding explanation and equations for time delayed nudging (It'll be here in the next report...)
+Adding explanation and equations for time delayed nudging...
 
 ### Dynamical State and Parameter Estimation
 
@@ -256,148 +279,10 @@ $$
 $$
 we can get the equations in the "Dynamic Equations" section.
 
-### B. Details of the I4D-VAR Code (Reference or starting point for us to apply our dynamical nudging or DSPE method to the ROMS)
 
-A module file mod_fourdvar.F is used to run the minimization of the cost function using Lanczos algorithm or descent algorithm. (More details are being studied in order for us to put in our dynamical nudging methos)
-
-The cost function and its gradient is called to compute in the following section of code in is4dvar_ocean.h, which is also the part we are planning to modify to apply dynamical nudging method. The actual computation is done in tl_main3d.F.
-
-```
-!
-!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-!  Time-step tangent linear model: compute cost function.
-!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-!
-!  If first pass inner=0, initialize tangent linear state (increments,
-!  deltaX) from rest. Otherwise, use trial initial conditions estimated
-!  by the conjugate gradient algorithm in previous inner loop. The TLM
-!  initial conditions are read from ITL(ng)%name, record 1.
-!
-          DO ng=1,Ngrids
-            ITL(ng)%Rindex=1
-!$OMP PARALLEL
-            CALL tl_initial (ng)
-!$OMP END PARALLEL
-            IF (exit_flag.ne.NoError) RETURN
-          END DO
-!
-!  On first pass, initialize records 2, 3 and 4 of the ITL file to zero.
-!
-          IF (inner.eq.0.and.outer.eq.1) THEN
-            DO ng=1,Ngrids
-              CALL tl_wrt_ini (ng, LTLM1, Rec2)
-              IF (exit_flag.ne.NoError) RETURN
-              CALL tl_wrt_ini (ng, LTLM1, Rec3)
-              IF (exit_flag.ne.NoError) RETURN
-              CALL tl_wrt_ini (ng, LTLM1, Rec4)
-              IF (exit_flag.ne.NoError) RETURN
-            END DO
-          END IF
-
-#ifdef MULTIPLE_TLM
-!
-!  If multiple TLM history NetCDF files, activate writing and determine
-!  output file name. The multiple file option is use to perturb initial
-!  state and create ensembles.  The TLM final trajectory is written for
-!  each inner loop on separated NetCDF files.
-!
-          DO ng=1,Ngrids
-            LdefTLM(ng)=.TRUE.
-            LwrtTLM(ng)=.TRUE.
-            WRITE (TLM(ng)%name,10) TRIM(TLM(ng)%base), Nrun
-          END DO
-#endif
-!
-!  Activate switch to write out initial and final misfit between
-!  model and observations.
-!
-          DO ng=1,Ngrids
-            wrtMisfit(ng)=.FALSE.
-            IF (((outer.eq.1).and.(inner.eq.0)).or.                     &
-     &          ((outer.eq.Nouter).and.(inner.eq.Ninner))) THEN
-              wrtMisfit(ng)=.TRUE.
-            END IF
-          END DO
-!
-!  Run tangent linear model. Compute misfit observation cost function,
-!  Jo.
-!
-          DO ng=1,Ngrids
-            IF (Master) THEN
-              WRITE (stdout,20) 'TL', ng, ntstart(ng), ntend(ng)
-            END IF
-          END DO
-
-!$OMP PARALLEL
-#ifdef SOLVE3D
-          CALL tl_main3d (RunInterval)
-#else
-          CALL tl_main2d (RunInterval)
-#endif
-!$OMP END PARALLEL
-          IF (exit_flag.ne.NoError) RETURN
-
-#ifdef MULTIPLE_TLM
-!
-!  If multiple TLM history NetCDF files, close current NetCDF file.
-!
-          DO ng=1,Ngrids
-            IF (TLM(ng)%ncid.ne.-1) THEN
-              SourceFile='is4dvar_ocean.h, ROMS_run'
-
-              CALL netcdf_close (ng, iTLM, TLM(ng)%ncid)
-              IF (exit_flag.ne.NoError) RETURN
-            END IF
-          END DO
-#endif
-!
-!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-!  Time step adjoint model backwards: compute cost function gradient.
-!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-!
-!  Initialize the adjoint model always from rest.
-!
-          DO ng=1,Ngrids
-!$OMP PARALLEL
-            CALL ad_initial (ng)
-!$OMP END PARALLEL
-            IF (exit_flag.ne.NoError) RETURN
-          END DO
-!
-!  Time-step adjoint model backwards. The adjoint model is forced with
-!  the adjoint of the observation misfit (Jo) term.
-!
-          DO ng=1,Ngrids
-            IF (Master) THEN
-              WRITE (stdout,20) 'AD', ng, ntstart(ng), ntend(ng)
-            END IF
-          END DO
-
-!$OMP PARALLEL
-#ifdef SOLVE3D
-          CALL ad_main3d (RunInterval)
-#else
-          CALL ad_main2d (RunInterval)
-#endif
-!$OMP END PARALLEL
-          IF (exit_flag.ne.NoError) RETURN
-!
-!  Clear adjoint arrays.  Is it needed?
-!
-          DO ng=1,Ngrids
-!$OMP PARALLEL
-            DO tile=first_tile(ng),last_tile(ng),+1
-              CALL initialize_ocean (ng, tile, iADM)
-#if defined ADJUST_STFLUX || defined ADJUST_WSTRESS
-              CALL initialize_forces (ng, tile, iADM)
-#endif
-            END DO
-!$OMP END PARALLEL
-          END DO
-!
-```
 
 Reference
 
 [1] Abarbanel, Henry DI, et al. "Dynamical state and parameter estimation." SIAM Journal on Applied Dynamical Systems (2009): 1341-1381.
 [2] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.
+[3] Dewey, Richard K., and William R. Crawford. "Bottom stress estimates from vertical dissipation rate profiles on the continental shelf." Journal of Physical Oceanography 18.8 (1988): 1167-1177.

@@ -181,9 +181,30 @@ Let's say we have a model with dynamical variables $\vec{y}(t)$, and from experi
 
 For simplicity we assume only the first dimension of $\vec{X}(t)$, i.e. $x_1(t)$ is measured over the time series. Also, we recognize that measurements are not made in continuous time but at discrete times. Thus we rewrite our dynamical state variable in discrete time: $\vec{X}(n)=\{x_1(n);\vec{X}_R(n)\}$, where $\vec{X}_R(n)$ are the unobserved dimensions.
 
-Similarly, We wirte our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}$.
+Similarly, We write our D-dimensional model variable as $\vec{y}(n)=\{y_1(n);\vec{y}_R(n)\}$, where $y_1(n)$ corresponds to the observed $x_1(n)$, and the "rest" of them are indicated collectively by a subscript R. Last, we assume this model contains $L$ unknown parameters $\vec{p}=\{p_1,p_2,...,p_L\}$.
 
-(Other details to be added here...)
+In discrete time limit, we can represent our physical model as a set of equations as a function of discrete time:
+
+$$
+y_1(n+1)=F_1(\vec{y}(n);\vec{p})
+$$ 
+$$
+\vec{y}_R(n+1)=\vec{F}_R[\vec{y}(n);\vec{p}]
+$$
+
+We see from above that the phase-space behavior of our model is determined by initial state $\vec{y}(0)$ and model parameters $\vec{p}=\{p_1,p_2,...,p_L\}$. 
+
+Recall that our goal is to synchronize the (rather limited) measurements with our model, to the best of our knowledge, a standard way to quantify this is to introduce the Mean-Squared Error Function:
+
+$$
+C(\vec{y}(0);\vec{p})\equiv\frac1{2N}\sum_{n=1}^{N-1} \{[x_1(n)-y_1(n)]^2\}
+$$
+
+This is a function of all the parameters $\vec{p}$ because the time evolution of our model depends on these parameters, and this is a function of $\vec{y}_R(0)$ because the time evolution requires full initial states. With these said, it seem that if we can tune our model parameter and initial state to an optimal setting that minimizes the Error Function $C$, we will be done the estimation process. However, in real world, it is rare that a physical system can be this perfect -- i.e., usually these systems are chaotic, generating wild deviations between measurements and predictions. Mathematically speaking, it is because the synchronization manifold $\vec{X}(n)\simeq\vec{y}(n)$ is not stable. This indicates, on the other hand, at least one positive Lyapunov exponent in Lyapunov spectrum.
+
+This drive us to investigate the stability and regularization of the synchronization manifold, which is a must have for minimization of $C(\vec{y}(0);\vec{p})$
+
+(Mar 3rd: further details to be added here... Stabilization, How DSPE reduces CLE, details of the DSPE equations etc.)
 
 The core equations for DSPE are:
 
@@ -199,12 +220,15 @@ $$
 
 Where $C$ is the cost function we need to minimize, $u(n)$ is the regularization term. $F_1$ and $F_R$ are the dynamical equations of the system.
 
-(Detailed explanation of the above equations here...)
-
-(To be completed):
+(To be completed Mar 3rd):
 1. How can we incorparate DSPE into ROMS.
 2. What physics questions can be asked.
+3. DSPE with time-delayed nudging.
 
+### Discussion: the Number of Required Observations in Data Assimilation in ROMS
+
+An important Chapter to be started in Mar. 3rd report. Reference: [4]
+(Simple nudging vs. DSPE+time-delayed nudging)
 
 ## Appendix
 
@@ -288,3 +312,4 @@ Reference
 [1] Abarbanel, Henry DI, et al. "Dynamical state and parameter estimation." SIAM Journal on Applied Dynamical Systems (2009): 1341-1381.
 [2] An, Z., Rey, D., Ye, J., and Abarbanel, H. D. I.: Estimating the state of a geophysical system with sparse observations: time delay methods to achieve accurate initial states for prediction, Nonlin. Processes Geophys., 24, 9-22, doi:10.5194/npg-24-9-2017, 2017.
 [3] Dewey, Richard K., and William R. Crawford. "Bottom stress estimates from vertical dissipation rate profiles on the continental shelf." Journal of Physical Oceanography 18.8 (1988): 1167-1177.
+[4] Whartenby, William G., John C. Quinn, and Henry DI Abarbanel. "The number of required observations in data assimilation for a shallow-water flow." Monthly Weather Review 141.7 (2013): 2502-2518.

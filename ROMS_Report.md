@@ -107,6 +107,8 @@ As shown above, these equations approximate those terms with the gradient of vel
 
 In ROMS, there is a bottom layer is assume to have zero velocity (no-slip boundary condition), the thickness of the layer is defined as the roughness of the bottom $z_0$. However, usually $z_0$ is much smaller than the thickness of one vertical layer in the discretized vertical s-coordinate and the horizontal velocity (u,v) are evaluated at the mid point in each vertical layer ($\rho$ point in the following graph). For example, the $z_0$ value used in the previous toy model is 20 cm, while the thickness of the bottom layer is around 1000m.  Then we need to estimate the effect of the bottom no-slip layer on the lowest $\rho$ points, which gives us the bottom boundary condition to use in u and v.
 
+![Vertical grid](1.png)
+
 The method in ROMS to estimate the bottom stress from the no-slip boundary condition is to assume a layer of constant Reynolds stress near the bottom [3]. Then applying the turbulence closure we discussed before, we have
 
 $$

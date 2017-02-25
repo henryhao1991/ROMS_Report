@@ -228,7 +228,8 @@ Where $C$ is the cost function we need to minimize, $u(n)$ is the regularization
 ### Discussion: the Number of Required Observations in Data Assimilation in ROMS
 
 An important Chapter to be started in Mar. 3rd report. Reference: [4]
-Simple nudging vs. DSPE+time-delayed nudging
+
+[Simple nudging vs. DSPE+time-delayed nudging]
 
 ## Appendix
 

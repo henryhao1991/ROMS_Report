@@ -163,6 +163,10 @@ TBD.
 
 ## Our Plan on Improving Data Assimilation in ROMS
 
+###Twin experiments
+
+
+
 ### Time Delayed Nudging
 
 In Zhe's paper [2], it was found that, by using the time delayed nudging method, the number of observed data required to make good predictions are reduced from 70% to 33% compared to the standard nudging method in the shallow water environment. It indicates that by introducing time delayed nudging into ROMS, we could potentially improve the system and make better forcast.
@@ -187,12 +191,12 @@ In discrete time limit, we can represent our physical model as a set of equation
 
 $$
 y_1(n+1)=F_1(\vec{y}(n);\vec{p})
-$$ 
+$$
 $$
 \vec{y}_R(n+1)=\vec{F}_R[\vec{y}(n);\vec{p}]
 $$
 
-We see from above that the phase-space behavior of our model is determined by initial state $\vec{y}(0)$ and model parameters $\vec{p}=\{p_1,p_2,...,p_L\}$. 
+We see from above that the phase-space behavior of our model is determined by initial state $\vec{y}(0)$ and model parameters $\vec{p}=\{p_1,p_2,...,p_L\}$.
 
 Recall that our goal is to synchronize the (rather limited) measurements with our model, to the best of our knowledge, a standard way to quantify this is to introduce the Mean-Squared Error Function:
 

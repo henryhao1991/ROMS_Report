@@ -165,7 +165,25 @@ TBD.
 
 ###Twin experiments
 
+The twin experiments we set up is the same as our previous work, except that the wind force is added. The initial conditions are shown below. one set start with an initial temperature gradient and 0 initial velocity, while the other one has a Gaussian noise added on temperature and velocity.
 
+<img src="Ti_Data.png" alt="Drawing" style="width: 400px;"/><img src="Ti_Model.png" alt="Drawing" style="width: 400px;"/>
+<img src="U_Data.png" alt="Drawing" style="width: 400px;"/><img src="U_Model.png" alt="Drawing" style="width: 400px;"/>
+<img src="V_Data.png" alt="Drawing" style="width: 400px;"/><img src="V_Model.png" alt="Drawing" style="width: 400px;"/>
+
+The wind force added has the form $\tau_u (i,j) = -0.1cos(2\pi y(i,j)/L)\space m^2/s^2$, where i,j are the index of grid points in x and y directions respectively, L is the total length in y direction, and subscript u indicates that the wind force is in x direction. The boundary conditions are periodical for y direction and closed for x direction. The bottom is flat. The other relevant parameters are listed below.
+
+| name                                | Description                             |Value             |
+| ----------------------------------- | --------------------------------------- |------------------|
+| $N_i$                               | Number of x direction $\rho$ points     |200               |
+| $N_j$                               | Number of y direction $\rho$ points     |100               |
+| $N_\sigma$                          | Number of vertical layers               |20                |
+| $dt$                                | Time step size                          |600s (10 min)     |
+| $N_{time}$                          | Number of time steps                    |42200             |
+| $N_{his}$                           | Number of time steps between observation|144 (1 day)       |
+| $Zo_b$                              | Bottom Roughness                        |0.02m             |
+| $\theta_s$                          | See Vertical S-coordinate section       |7                 |
+| $\theta_b$                          | See Vertical S-coordinate section       |0.1               |
 
 ### Time Delayed Nudging
 

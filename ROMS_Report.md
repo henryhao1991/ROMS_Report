@@ -171,7 +171,7 @@ The twin experiments we set up is the same as our previous work, except that the
 <img src="U_Data.png" alt="Drawing" style="width: 400px;"/><img src="U_Model.png" alt="Drawing" style="width: 400px;"/>
 <img src="V_Data.png" alt="Drawing" style="width: 400px;"/><img src="V_Model.png" alt="Drawing" style="width: 400px;"/>
 
-The wind force added has the form $\tau_u (i,j) = -0.1cos(2\pi y(i,j)/L)\space m^2/s^2$, where i,j are the index of grid points in x and y directions respectively, L is the total length in y direction, and subscript u indicates that the wind force is in x direction. The boundary conditions are periodical for y direction and closed for x direction. The bottom is flat. The other relevant parameters are listed below.
+The wind force added has the form $\tau_u (i,j) = -0.1cos(2\pi y(i,j)/L)\space m^2/s^2$, where i,j are the index of grid points in x and y directions respectively, L is the total length in y direction, and subscript u indicates that the wind force is in x direction. The boundary conditions are periodical for y direction and closed for x direction. The bottom is flat. The other relevant parameters are listed below, as well as a plot for the wind stress.
 
 | name                                | Description                             |Value             |
 | ----------------------------------- | --------------------------------------- |------------------|
@@ -184,6 +184,23 @@ The wind force added has the form $\tau_u (i,j) = -0.1cos(2\pi y(i,j)/L)\space m
 | $Zo_b$                              | Bottom Roughness                        |0.02m             |
 | $\theta_s$                          | See Vertical S-coordinate section       |7                 |
 | $\theta_b$                          | See Vertical S-coordinate section       |0.1               |
+
+<img src="Windstress.png" alt="Drawing" style="width: 600px;"/>
+
+\
+The total number of unknown variables are: 200x100x20x3(u, v, and temperature)+200x100($\zeta$) ~
+ 24.4 million. Below the graphs for the final velocity and temperature are provided.
+
+ <img src="Tf_Data.png" alt="Drawing" style="width: 400px;"/><img src="Tf_Model.png" alt="Drawing" style="width: 400px;"/>
+ <img src="Uf_Data.png" alt="Drawing" style="width: 400px;"/><img src="Uf_Model.png" alt="Drawing" style="width: 400px;"/>
+ <img src="Vf_Data.png" alt="Drawing" style="width: 400px;"/><img src="Vf_Model.png" alt="Drawing" style="width: 400px;"/>
+
+
+###Simple Nudging
+(We will be doing this for the next week, and here's the plan)
+
+We would like to apply the simple nudging method to the twin experiments, and see how many percentage of data we need to get good predictions after nudging. Right now based on the previous results in our group for shallow water equations, I would expect something around 70% to 80% percent.
+However, We are thinking on how to pick up the points, since the data in deep ocean is usually hard to get. We are considering only do nudging on the layers from top to down. For example, if we use 80% of the data, then we can use the top 18 layers, which is 90%, and then pick 90% of the points randomly from the horizontal plane, then we will have 90%x90%=81% observed data, which is close to 80.)
 
 ### Time Delayed Nudging
 

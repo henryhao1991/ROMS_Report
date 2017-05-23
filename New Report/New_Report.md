@@ -29,7 +29,7 @@ The total number of unknown variables are: 20x10x5x3(u, v, and temperature)+20x1
 
 ###Simple Nudging results
 
-From day 71 to day 140, we applied simple nudging to the system on the left hand side, trying to nudge it to the system with Gaussian noises added. After that, we run both systems without nudging until day 400, and compare the two systems. Below is a plot of estimation error , which is defined as
+From day 71 to day 140, we applied simple nudging to the system on the left hand side, trying to nudge it to the system with Gaussian noises added. After that, we run both systems without nudging until day 400, and compare the two systems. Below is a plot of estimation error vs time, which is defined as
 
 $$
 Estimation \space Error = \frac{1}{N_iN_jN_\sigma}\sum_{over\space all\space grids} (x_i^2-y_i^2)
@@ -40,4 +40,4 @@ The results are plotted below.
 <img src="nudging.png" alt="Drawing" style="width: 800px;"/>
 
 \
-From the graph, we can see that we roughly need around 75%-80% of the variables observed to have a good prediction.
+From the graph, we can see that we roughly need around 75%-80% of the variables observed to have a good prediction. Next thing we want to do is to increase the forcing and see how the system behaves, and if we get similar result with simple nudging or not.
